@@ -1,0 +1,24 @@
+### Java ###
+*.class
+*.log
+
+### Package Files ###
+*.jar
+*.war
+*.ear
+
+### Maven ###
+target/
+
+### Eclipse ###
+.project
+.classpath
+.settings/
+
+### IntelliJ ###
+.idea/
+*.iml
+
+### OS ###
+.DS_Store
+Thumbs.db
