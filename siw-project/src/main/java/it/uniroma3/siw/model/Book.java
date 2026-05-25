@@ -59,7 +59,7 @@ public class Book {
     // equals & hashCode
     @Override
     public int hashCode() {
-        return Objects.hash(author, description, id, price, title);
+        return Objects.hash(id);
     }
 
     @Override
