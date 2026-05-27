@@ -3,16 +3,16 @@ package it.uniroma3.siw;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import it.uniroma3.siw.model.Book;
-import it.uniroma3.siw.repository.BookRepository;
+import it.uniroma3.siw.model.Libro;
+import it.uniroma3.siw.repository.LibroRepository;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private final BookRepository bookRepository;
+    private final LibroRepository bookRepository;
 
     // iniezione del repository
-    public DataLoader(BookRepository bookRepository) {
+    public DataLoader(LibroRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
@@ -20,7 +20,7 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) {
 
         // libro di test per riempire il database all'avvio
-        Book b1 = new Book();
+        Libro b1 = new Libro();
         b1.setTitle("Spring Boot");
         b1.setAuthor("Mario Rossi");
         b1.setPrice(30.0);

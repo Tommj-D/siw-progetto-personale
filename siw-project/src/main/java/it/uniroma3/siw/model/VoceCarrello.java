@@ -49,13 +49,13 @@ public class VoceCarrello {
     }
 
     @ManyToOne
-    private Book book;
+    private Libro book;
 
-    public Book getBook() {
+    public Libro getBook() {
         return book;
     }
 
-    public void setBook(Book book) {
+    public void setBook(Libro book) {
         this.book = book;
     }
     

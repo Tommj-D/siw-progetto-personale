@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import it.uniroma3.siw.model.Book;
-import it.uniroma3.siw.service.BookService;
+import it.uniroma3.siw.model.Libro;
+import it.uniroma3.siw.service.LibroService;
 
 @Controller
 public class BookController {
 
-    private final BookService bookService;
+    private final LibroService bookService;
 
-    public BookController(BookService bookService) {
+    public BookController(LibroService bookService) {
         this.bookService = bookService;
     }
     
@@ -44,7 +44,7 @@ public class BookController {
     // UC4: Mostra il form per aggiungere un nuovo libro
     @GetMapping("/admin/books/new")
     public String showNewBookForm(Model model) {
-        model.addAttribute("book", new Book());
+        model.addAttribute("book", new Libro());
         return "bookForm"; 
     }
 
@@ -57,7 +57,7 @@ public class BookController {
 
     // UC4 e UC5: Gestisce il salvataggio dei dati inviati dal form (Insert o Update)
     @PostMapping("/admin/books")
-    public String saveBook(@ModelAttribute Book book) {
+    public String saveBook(@ModelAttribute Libro book) {
         bookService.saveBook(book);
         return "redirect:/books"; // Dopo il salvataggio, rimanda l'utente al catalogo
     }

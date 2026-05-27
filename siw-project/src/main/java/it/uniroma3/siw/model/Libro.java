@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
-public class Book {
+public class Libro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -65,8 +65,8 @@ public class Book {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Book)) return false;
-        Book other = (Book) obj;
+        if (!(obj instanceof Libro)) return false;
+        Libro other = (Libro) obj;
         return Objects.equals(id, other.id);
     }
 }

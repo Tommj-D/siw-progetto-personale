@@ -4,32 +4,32 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import it.uniroma3.siw.model.Book;
-import it.uniroma3.siw.repository.BookRepository;
+import it.uniroma3.siw.model.Libro;
+import it.uniroma3.siw.repository.LibroRepository;
 
 @Service
-public class BookService {
+public class LibroService {
 
-    private BookRepository bookRepository;
+    private LibroRepository bookRepository;
     
-    public BookService(BookRepository bookRepository) {
+    public LibroService(LibroRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> getAllBooks() {
+    public List<Libro> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public Book getBookById(Long id) {
+    public Libro getBookById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
-    public List<Book> searchBooks(String keyword) {
+    public List<Libro> searchBooks(String keyword) {
         return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(keyword, keyword);
     }
     
     @Transactional
-    public Book saveBook(Book book) {
+    public Libro saveBook(Libro book) {
         return bookRepository.save(book);
     }
 

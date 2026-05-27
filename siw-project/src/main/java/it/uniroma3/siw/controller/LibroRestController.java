@@ -8,29 +8,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.uniroma3.siw.model.Book;
-import it.uniroma3.siw.service.BookService;
+import it.uniroma3.siw.model.Libro;
+import it.uniroma3.siw.service.LibroService;
 
 @RestController
 @RequestMapping("/api/books")
 @CrossOrigin(origins = "*")
-public class BookRestController {
+public class LibroRestController {
 
-    private final BookService bookService;
+    private final LibroService bookService;
 
-    public BookRestController(BookService bookService) {
+    public LibroRestController(LibroService bookService) {
         this.bookService = bookService;
     }
 
     // Risponde a: GET http://localhost:8080/api/books
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<Libro> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     // Risponde a: GET http://localhost:8080/api/books/1
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable Long id) {
+    public Libro getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 }
