@@ -15,11 +15,13 @@ public class CarrelloService {
     public CarrelloService(CarrelloRepository carrelloRepository) {
         this.carrelloRepository = carrelloRepository;
     }
-
+    
+    @Transactional(readOnly = true)
     public List<Carrello> getAllCarrelli() {
         return carrelloRepository.findAll();
     }
-
+    
+    @Transactional(readOnly = true)
     public Carrello getCarrelloById(Long id) {
         return carrelloRepository.findById(id).orElse(null);
     }

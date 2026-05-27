@@ -16,21 +16,21 @@ import it.uniroma3.siw.service.LibroService;
 @CrossOrigin(origins = "*")
 public class LibroRestController {
 
-    private final LibroService bookService;
+    private final LibroService libroService;
 
     public LibroRestController(LibroService bookService) {
-        this.bookService = bookService;
+        this.libroService = bookService;
     }
 
     // Risponde a: GET http://localhost:8080/api/books
     @GetMapping
-    public List<Libro> getAllBooks() {
-        return bookService.getAllBooks();
+    public List<Libro> getAllLibri() {
+        return libroService.getAllLibri();
     }
 
     // Risponde a: GET http://localhost:8080/api/books/1
     @GetMapping("/{id}")
-    public Libro getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public Libro getLibroById(@PathVariable Long id) {
+        return libroService.getLibroById(id);
     }
 }

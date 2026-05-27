@@ -15,26 +15,28 @@ public class LibroService {
     public LibroService(LibroRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
-
-    public List<Libro> getAllBooks() {
+    
+    @Transactional(readOnly = true)
+    public List<Libro> getAllLibri() {
         return bookRepository.findAll();
     }
-
-    public Libro getBookById(Long id) {
+    
+    @Transactional(readOnly = true)
+    public Libro getLibroById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
-    public List<Libro> searchBooks(String keyword) {
+    public List<Libro> searchLibri(String keyword) {
         return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(keyword, keyword);
     }
     
     @Transactional
-    public Libro saveBook(Libro book) {
+    public Libro saveLibro(Libro book) {
         return bookRepository.save(book);
     }
 
     @Transactional
-    public void deleteBook(Long id) {
+    public void deleteLibro(Long id) {
         bookRepository.deleteById(id);
     }
 }

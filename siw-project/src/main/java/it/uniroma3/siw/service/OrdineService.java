@@ -18,12 +18,15 @@ public class OrdineService {
         this.ordineRepository = ordineRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Ordine> getAllOrdini() {
         return ordineRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<Ordine> getOrdiniByUtente(Utente utente) {
-        return (List<Ordine>) ordineRepository.findByUtente(utente);
+        // Niente più cast!
+        return ordineRepository.findByUtente(utente);
     }
 
     @Transactional
