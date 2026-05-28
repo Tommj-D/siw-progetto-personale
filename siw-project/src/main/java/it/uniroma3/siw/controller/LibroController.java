@@ -12,11 +12,11 @@ import it.uniroma3.siw.model.Libro;
 import it.uniroma3.siw.service.LibroService;
 
 @Controller
-public class BookController {
+public class LibroController {
 
     private final LibroService bookService;
 
-    public BookController(LibroService bookService) {
+    public LibroController(LibroService bookService) {
         this.bookService = bookService;
     }
     
