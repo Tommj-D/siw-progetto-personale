@@ -3,51 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestione Libro</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .form-container { border: 1px solid #ccc; padding: 20px; border-radius: 5px; max-width: 400px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input[type="text"], input[type="number"], textarea { width: 100%; padding: 8px; box-sizing: border-box; }
-        button { padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 3px; cursor: pointer; }
-        button:hover { background-color: #218838; }
-        .back-link { display: inline-block; margin-top: 15px; text-decoration: none; color: #007bff; }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="m-4 bg-light">
 
-    <h1 th:text="${libro.id != null} ? 'Modifica Libro' : 'Inserisci Nuovo Libro'">Gestione Libro</h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                
+                <div class="card shadow-sm mt-5">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4" th:text="${libro.id != null} ? 'Modifica Libro' : 'Inserisci Nuovo Libro'">
+                            Gestione Libro
+                        </h2>
 
-    <div class="form-container">
-        <form th:action="@{/admin/libri}" th:object="${libro}" method="post">
-            
-            <input type="hidden" th:field="*{id}" />
+                        <form th:action="@{/admin/libri}" th:object="${libro}" method="post">
+                            <input type="hidden" th:field="*{id}" />
 
-            <div class="form-group">
-                <label>Titolo:</label>
-                <input type="text" th:field="*{titolo}" required placeholder="Es. Il Signore degli Anelli" />
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Titolo:</label>
+                                <input type="text" class="form-control" th:field="*{titolo}" required placeholder="Es. Il Signore degli Anelli" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Autore:</label>
+                                <input type="text" class="form-control" th:field="*{autore}" required placeholder="Es. J.R.R. Tolkien" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Prezzo (€):</label>
+                                <input type="number" step="0.01" class="form-control" th:field="*{prezzo}" required placeholder="Es. 19.99" />
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Descrizione:</label>
+                                <textarea class="form-control" th:field="*{descrizione}" rows="3" placeholder="Inserisci una breve trama..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">Salva Libro</button>
+                        </form>
+                        
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a class="text-decoration-none" th:href="@{/libri}">← Annulla e torna al catalogo</a>
+                </div>
+
             </div>
-
-            <div class="form-group">
-                <label>Autore:</label>
-                <input type="text" th:field="*{autore}" required placeholder="Es. J.R.R. Tolkien" />
-            </div>
-
-            <div class="form-group">
-                <label>Prezzo (€):</label>
-                <input type="number" step="0.01" th:field="*{prezzo}" required placeholder="Es. 19.99" />
-            </div>
-            
-            <div class="form-group">
-                <label>Descrizione:</label>
-                <textarea th:field="*{descrizione}" rows="4" placeholder="Inserisci una breve trama..."></textarea>
-            </div>
-
-            <button type="submit">Salva Libro</button>
-        </form>
+        </div>
     </div>
-
-    <a class="back-link" th:href="@{/libri}">← Annulla e torna al catalogo</a>
 
 </body>
 </html>
