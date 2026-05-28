@@ -21,51 +21,53 @@ public class LibroController {
     }
     
     // UC1: Catalogo
-    @GetMapping("/books")
+    @GetMapping("/libri")
     public String showBooks(Model model) {
-        model.addAttribute("books", bookService.getAllLibri());
-        return "books";
+        // Usiamo "listaLibri" come nome standard per il template catalogo
+        model.addAttribute("listaLibri", bookService.getAllLibri());
+        return "catalogo";
     }
 
     // UC2: Dettaglio libro
-    @GetMapping("/books/{id}")
+    @GetMapping("/libri/{id}")
     public String showBookDetails(@PathVariable Long id, Model model) {
-        model.addAttribute("book", bookService.getLibroById(id));
-        return "bookDetails"; 
+        model.addAttribute("libro", bookService.getLibroById(id));
+        return "dettaglioLibro"; 
     }
 
     // UC3: Ricerca
-    @GetMapping("/books/search")
+    @GetMapping("/libri/search")
     public String searchBooks(@RequestParam("keyword") String keyword, Model model) {
-        model.addAttribute("books", bookService.searchLibri(keyword));
-        return "books"; // Riusiamo la stessa pagina del catalogo per mostrare i risultati
+        // Usiamo lo stesso nome "listaLibri" così il template catalogo funziona in entrambi i casi
+        model.addAttribute("listaLibri", bookService.searchLibri(keyword));
+        return "catalogo";
     }
 
     // UC4: Mostra il form per aggiungere un nuovo libro
-    @GetMapping("/admin/books/new")
+    @GetMapping("/admin/libri/new")
     public String showNewBookForm(Model model) {
-        model.addAttribute("book", new Libro());
-        return "bookForm"; 
+        model.addAttribute("libro", new Libro()); // Uniformato in "libro"
+        return "formLibro"; 
     }
 
     // UC5: Mostra il form per modificare un libro esistente
-    @GetMapping("/admin/books/edit/{id}")
+    @GetMapping("/admin/libri/edit/{id}")
     public String showEditBookForm(@PathVariable Long id, Model model) {
-        model.addAttribute("book", bookService.getLibroById(id));
-        return "bookForm";
+        model.addAttribute("libro", bookService.getLibroById(id)); // Uniformato in "libro"
+        return "formLibro";
     }
 
     // UC4 e UC5: Gestisce il salvataggio dei dati inviati dal form (Insert o Update)
-    @PostMapping("/admin/books")
-    public String saveBook(@ModelAttribute Libro book) {
-        bookService.saveLibro(book);
-        return "redirect:/books"; // Dopo il salvataggio, rimanda l'utente al catalogo
+    @PostMapping("/admin/libri")
+    public String saveBook(@ModelAttribute("libro") Libro libro) {
+        bookService.saveLibro(libro);
+        return "redirect:/libri";
     }
 
     // UC6: Cancellazione di un libro
-    @GetMapping("/admin/books/delete/{id}")
+    @GetMapping("/admin/libri/delete/{id}")
     public String deleteBook(@PathVariable Long id) {
         bookService.deleteLibro(id);
-        return "redirect:/books";
+        return "redirect:/libri";
     }
 }
