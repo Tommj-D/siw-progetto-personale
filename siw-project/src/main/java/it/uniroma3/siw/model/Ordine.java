@@ -21,7 +21,19 @@ public class Ordine {
     private LocalDate dataOrdine;
     
     private Double totale;
+    
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    private Utente utente;
+    
+    @OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL, fetch = jakarta.persistence.FetchType.LAZY)
+    private java.util.List<DettaglioOrdine> dettagli = new java.util.ArrayList<>();
 
+    // Metodo helper fondamentale per l'associazione bidirezionale
+    public void aggiungiDettaglio(DettaglioOrdine dettaglio) {
+        this.dettagli.add(dettaglio);
+        dettaglio.setOrdine(this); 
+    }
+    
     // Costruttore vuoto
     public Ordine() {
     }
@@ -50,9 +62,6 @@ public class Ordine {
     public void setTotale(Double totale) {
         this.totale = totale;
     }
-
-    @ManyToOne
-    private Utente utente;
     
     public Utente getUtente() {
         return utente;
@@ -61,9 +70,6 @@ public class Ordine {
     public void setUtente(Utente utente) {
         this.utente = utente;
     }
-
-    @OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL)
-    private java.util.List<DettaglioOrdine> dettagli;
 
     public java.util.List<DettaglioOrdine> getDettagli() {
         return dettagli;

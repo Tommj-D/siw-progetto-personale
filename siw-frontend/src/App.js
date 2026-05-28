@@ -40,6 +40,26 @@ function App() {
     return carrello.reduce((totale, item) => totale + (item.prezzo * item.quantita), 0).toFixed(2);
   };
 
+  const procediAllOrdine = () => {
+    // Trasformiamo il carrello nel formato esatto che si aspetta il tuo OrdineRestController
+    const payload = {
+      dettagli: carrello.map(item => ({ libro: { id: item.id }, quantita: item.quantita }))
+    };
+
+    // Spediamo il pacchetto a Spring Boot!
+    fetch('http://localhost:8080/api/orders/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(`Ordine completato con successo! ID Ordine: ${data.id}`);
+      setCarrello([]); // Svuotiamo il carrello dopo l'acquisto
+    })
+    .catch(err => console.error("Errore durante l'ordine:", err));
+  };
+
   return (
     <div className="container py-5 bg-light min-vh-100">
       <div className="text-center mb-5">
@@ -126,7 +146,9 @@ function App() {
                     <h5 className="m-0 fw-bold">Totale:</h5>
                     <h5 className="m-0 fw-bold text-success">{calcolaTotale()} €</h5>
                   </div>
-                  <button className="btn btn-success w-100 fw-bold">Procedi all'Ordine</button>
+                  <button className="btn btn-success w-100 fw-bold" onClick={procediAllOrdine}>
+                    Procedi all'Ordine
+                  </button>
                 </>
               )}
             </div>

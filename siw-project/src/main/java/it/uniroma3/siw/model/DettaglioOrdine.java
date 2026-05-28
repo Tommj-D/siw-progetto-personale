@@ -17,7 +17,13 @@ public class DettaglioOrdine {
     private Integer quantita;
     
     private Double prezzoAcquisto;
-
+    
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    private Ordine ordine;
+    
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    private Libro libro;
+    
     // Costruttore vuoto
     public DettaglioOrdine() {
     }
@@ -46,29 +52,21 @@ public class DettaglioOrdine {
     public void setPrezzoAcquisto(Double prezzoAcquisto) {
         this.prezzoAcquisto = prezzoAcquisto;
     }
-    
- // ... attributo prezzoAcquisto ...
 
-    @ManyToOne
-    private Ordine ordine;
-    
+    public Libro getLibro() {
+        return libro;
+    }
+
+    public void setLibro(Libro libro) {
+        this.libro = libro;
+    }
+
     public Ordine getOrdine() {
         return ordine;
     }
 
     public void setOrdine(Ordine ordine) {
         this.ordine = ordine;
-    }
-    
-    @ManyToOne
-    private Libro book;
-    
-    public Libro getBook() {
-        return book;
-    }
-
-    public void setBook(Libro book) {
-        this.book = book;
     }
 
     // equals e hashCode
