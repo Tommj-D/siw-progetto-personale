@@ -1,27 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-	<title>Catalogo Libri</title>
+    <meta charset="UTF-8">
+    <title>Catalogo Libri</title>
+    <style>
+        /* Un po' di stile base per non vederlo bruttissimo all'inizio */
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .libro-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .ricerca { margin-bottom: 20px; }
+    </style>
 </head>
-
 <body>
 
-	<h1>Catalogo Libri</h1>
+    <h1>Catalogo Libri</h1>
 
-	<!-- Caso catalogo vuoto -->
-	<div th:if="${#lists.isEmpty(books)}">
-		<p>Nessun libro disponibile</p>
-	</div>
+    <div class="ricerca">
+        <form th:action="@{/libri/search}" method="get">
+            <input type="text" name="keyword" placeholder="Cerca per titolo o autore..." required>
+            <button type="submit">Cerca</button>
+            <a th:href="@{/libri}">Resetta ricerca</a>
+        </form>
+    </div>
 
-	<!-- Lista libri -->
-	<div th:each="book : ${books}">
-		<h2 th:text="${book.title}"></h2>
-		<p>Autore: <span th:text="${book.author}"></span></p>
-		<p>Prezzo: <span th:text="${book.price}"></span></p>
-		<hr>
-	</div>
+    <div th:if="${#lists.isEmpty(listaLibri)}">
+        <p><strong>Nessun libro attualmente disponibile nel catalogo o per la ricerca effettuata.</strong></p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(listaLibri)}">
+        <div th:each="libro : ${listaLibri}" class="libro-card">
+            
+            <p><em>[Immagine Copertina]</em></p>
+            
+            <h2 th:text="${libro.titolo}">Titolo del Libro</h2>
+            <p><strong>Autore:</strong> <span th:text="${libro.autore}">Nome Autore</span></p>
+            <p><strong>Prezzo:</strong> <span th:text="${libro.prezzo} + ' €'">0.00 €</span></p>
+            
+            <a th:href="@{/libri/{id}(id=${libro.id})}">Visualizza Dettagli</a>
+            
+            <span style="margin-left: 15px;">
+                <a th:href="@{/admin/libri/edit/{id}(id=${libro.id})}">Modifica</a> |
+                <a th:href="@{/admin/libri/delete/{id}(id=${libro.id})}" onclick="return confirm('Sei sicuro di voler eliminare questo libro?');">Elimina</a>
+            </span>
+            
+        </div>
+    </div>
+
+    <br>
+    <a th:href="@{/admin/libri/new}">+ Aggiungi un nuovo libro</a>
 
 </body>
-
 </html>

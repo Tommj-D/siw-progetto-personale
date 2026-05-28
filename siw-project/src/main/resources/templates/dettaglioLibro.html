@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dettagli Libro</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .dettaglio-card { border: 1px solid #ccc; padding: 20px; border-radius: 5px; max-width: 600px; }
+        .back-link { margin-top: 20px; display: inline-block; text-decoration: none; color: blue; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h1>Dettagli del Libro</h1>
+
+    <div class="dettaglio-card" th:if="${libro != null}">
+        
+        <h2 th:text="${libro.titolo}">Titolo del Libro</h2>
+        <p><strong>Autore:</strong> <span th:text="${libro.autore}">Nome Autore</span></p>
+        <p><strong>Prezzo:</strong> <span th:text="${libro.prezzo} + ' €'">0.00 €</span></p>
+        
+        <hr>
+        
+        <h3>Descrizione:</h3>
+        <p th:text="${libro.descrizione != null} ? ${libro.descrizione} : 'Nessuna descrizione disponibile per questo libro.'">
+            Testo della descrizione...
+        </p>
+        
+    </div>
+
+    <div th:if="${libro == null}">
+        <p style="color: red;"><strong>Errore:</strong> Il libro richiesto non esiste o è stato rimosso.</p>
+    </div>
+
+    <a class="back-link" th:href="@{/libri}">← Torna al catalogo</a>
+
+</body>
+</html>

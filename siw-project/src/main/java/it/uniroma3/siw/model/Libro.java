@@ -14,46 +14,46 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String title;
-    private String author;
-    private Double price;
-    private String description;
+    private String titolo;
+    private String autore;
+    private Double prezzo;
+    private String descrizione;
 
     // Getter and Setter
     public Long getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitolo() {
+        return titolo;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAutore() {
+        return autore;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAutore(String autore) {
+        this.autore = autore;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getPrezzo() {
+        return prezzo;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrezzo(Double prezzo) {
+        this.prezzo = prezzo;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescrizione() {
+        return descrizione;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     // equals & hashCode

@@ -27,7 +27,7 @@ public class LibroService {
     }
 
     public List<Libro> searchLibri(String keyword) {
-        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(keyword, keyword);
+        return bookRepository.findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(keyword, keyword);
     }
     
     @Transactional

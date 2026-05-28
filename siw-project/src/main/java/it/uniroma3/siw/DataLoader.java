@@ -21,9 +21,9 @@ public class DataLoader implements CommandLineRunner {
 
         // libro di test per riempire il database all'avvio
         Libro b1 = new Libro();
-        b1.setTitle("Spring Boot");
-        b1.setAuthor("Mario Rossi");
-        b1.setPrice(30.0);
+        b1.setTitolo("Spring Boot");
+        b1.setAutore("Mario Rossi");
+        b1.setPrezzo(30.0);
 
         // salvataggio nel DB
         bookRepository.save(b1);
