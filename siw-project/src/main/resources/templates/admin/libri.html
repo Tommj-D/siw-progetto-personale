@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Area Admin - Gestione Libri</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="fw-bold">Gestione Magazzino Libri 📚</h1>
+            <a th:href="@{/admin/libri/new}" class="btn btn-success btn-lg">+ Aggiungi Nuovo Libro</a>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover m-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Titolo</th>
+                            <th>Autore</th>
+                            <th>Prezzo</th>
+                            <th class="text-center">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="libro : ${libri}">
+                            <td th:text="${libro.id}">1</td>
+                            <td th:text="${libro.titolo}" class="fw-bold">Titolo</td>
+                            <td th:text="${libro.autore}">Autore</td>
+                            <td th:text="${libro.prezzo} + ' €'">10.00 €</td>
+                            <td class="text-center">
+                                <a th:href="@{/admin/libri/edit/{id}(id=${libro.id})}" class="btn btn-sm btn-primary me-2">Modifica</a>
+                                <a th:href="@{/admin/libri/delete/{id}(id=${libro.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Sei sicuro di voler cancellare questo libro?');">Elimina</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(libri)}">
+                            <td colspan="5" class="text-center py-4 text-muted">Nessun libro presente in magazzino.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="/" class="text-muted">Torna al sito React</a>
+        </div>
+    </div>
+</body>
+</html>

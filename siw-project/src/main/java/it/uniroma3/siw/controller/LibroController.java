@@ -42,32 +42,4 @@ public class LibroController {
         model.addAttribute("listaLibri", bookService.searchLibri(keyword));
         return "catalogo";
     }
-
-    // UC4: Mostra il form per aggiungere un nuovo libro
-    @GetMapping("/admin/libri/new")
-    public String showNewBookForm(Model model) {
-        model.addAttribute("libro", new Libro()); // Uniformato in "libro"
-        return "formLibro"; 
-    }
-
-    // UC5: Mostra il form per modificare un libro esistente
-    @GetMapping("/admin/libri/edit/{id}")
-    public String showEditBookForm(@PathVariable Long id, Model model) {
-        model.addAttribute("libro", bookService.getLibroById(id)); // Uniformato in "libro"
-        return "formLibro";
-    }
-
-    // UC4 e UC5: Gestisce il salvataggio dei dati inviati dal form (Insert o Update)
-    @PostMapping("/admin/libri")
-    public String saveBook(@ModelAttribute("libro") Libro libro) {
-        bookService.saveLibro(libro);
-        return "redirect:/libri";
-    }
-
-    // UC6: Cancellazione di un libro
-    @GetMapping("/admin/libri/delete/{id}")
-    public String deleteBook(@PathVariable Long id) {
-        bookService.deleteLibro(id);
-        return "redirect:/libri";
-    }
 }

@@ -2,6 +2,7 @@ package it.uniroma3.siw.model;
 
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ public class Libro {
     private String titolo;
     private String autore;
     private Double prezzo;
+    @Column(length = 2000)
     private String descrizione;
 
     // Getter and Setter
@@ -58,6 +60,17 @@ public class Libro {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+    
+    @Column(length = 500) 
+    private String copertina; 
+    
+    public String getCopertina() {
+        return copertina;
+    }
+
+    public void setCopertina(String copertina) {
+        this.copertina = copertina;
     }
 
     // equals & hashCode

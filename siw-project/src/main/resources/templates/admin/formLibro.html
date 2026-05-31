@@ -34,6 +34,11 @@
                                 <label class="form-label fw-bold">Prezzo (€):</label>
                                 <input type="number" step="0.01" class="form-control" th:field="*{prezzo}" required placeholder="Es. 19.99" />
                             </div>
+							
+							<div class="mb-3">
+							        <label class="form-label fw-bold">Link Copertina:</label>
+							        <input type="text" class="form-control" th:field="*{copertina}" placeholder="Incolla qui l'URL dell'immagine..." />
+							    </div>
                             
                             <div class="mb-4">
                                 <label class="form-label fw-bold">Descrizione:</label>
@@ -47,7 +52,7 @@
                 </div>
 
                 <div class="text-center mt-3">
-                    <a class="text-decoration-none" th:href="@{/libri}">← Annulla e torna al catalogo</a>
+                    <a class="text-decoration-none" th:href="@{/admin/libri}">← Annulla e torna al catalogo</a>
                 </div>
 
             </div>

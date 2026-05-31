@@ -3,6 +3,8 @@ package it.uniroma3.siw.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ public class Ordine {
     private Double totale;
     
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    @JsonIgnore
     private Utente utente;
     
     @OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL, fetch = jakarta.persistence.FetchType.LAZY)

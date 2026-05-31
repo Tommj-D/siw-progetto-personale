@@ -10,33 +10,47 @@ import it.uniroma3.siw.repository.LibroRepository;
 @Service
 public class LibroService {
 
-    private LibroRepository bookRepository;
+    private LibroRepository libroRepository;
     
-    public LibroService(LibroRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public LibroService(LibroRepository libroRepository) {
+        this.libroRepository = libroRepository;
     }
     
     @Transactional(readOnly = true)
     public List<Libro> getAllLibri() {
-        return bookRepository.findAll();
+        return libroRepository.findAll();
     }
     
     @Transactional(readOnly = true)
     public Libro getLibroById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+        return libroRepository.findById(id).orElse(null);
     }
 
     public List<Libro> searchLibri(String keyword) {
-        return bookRepository.findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(keyword, keyword);
+        return libroRepository.findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(keyword, keyword);
     }
     
     @Transactional
     public Libro saveLibro(Libro book) {
-        return bookRepository.save(book);
+        return libroRepository.save(book);
     }
 
     @Transactional
     public void deleteLibro(Long id) {
-        bookRepository.deleteById(id);
+        libroRepository.deleteById(id);
+    }
+
+	public List<Libro> searchLibriByTitoloOrAutore(String query) {
+		return libroRepository.findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(query, query);
+	}
+	
+	// UC4 e UC5: Salva un nuovo libro o ne aggiorna uno esistente
+    public Libro salvaLibro(Libro libro) {
+        return libroRepository.save(libro);
+    }
+
+    // UC6: Cancella un libro dal database
+    public void deleteLibroById(Long id) {
+        libroRepository.deleteById(id);
     }
 }

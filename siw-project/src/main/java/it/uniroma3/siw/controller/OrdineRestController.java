@@ -1,6 +1,8 @@
 package it.uniroma3.siw.controller;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 import it.uniroma3.siw.model.Ordine;
 import it.uniroma3.siw.model.DettaglioOrdine;
@@ -43,5 +45,10 @@ public class OrdineRestController {
 
         // 3. Salviamo l'ordine nel database
         return ordineService.saveOrdine(ordine);
+    }
+    
+    @GetMapping
+    public List<Ordine> getOrdini() {
+        return ordineService.getAllOrdini(); 
     }
 }

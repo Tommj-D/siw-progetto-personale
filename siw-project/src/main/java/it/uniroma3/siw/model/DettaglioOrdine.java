@@ -7,6 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class DettaglioOrdine {
 
@@ -19,9 +22,11 @@ public class DettaglioOrdine {
     private Double prezzoAcquisto;
     
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    @JsonIgnore
     private Ordine ordine;
     
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Libro libro;
     
     // Costruttore vuoto
