@@ -1,33 +1,59 @@
 package it.uniroma3.siw.controller;
 
+import it.uniroma3.siw.model.Carrello;
+import it.uniroma3.siw.model.Utente;
+import it.uniroma3.siw.repository.UtenteRepository;
+import it.uniroma3.siw.service.CarrelloService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import it.uniroma3.siw.model.Carrello;
-import it.uniroma3.siw.service.CarrelloService;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class CarrelloController {
 
-    private final CarrelloService carrelloService;
+    @Autowired
+    private CarrelloService carrelloService;
 
-    public CarrelloController(CarrelloService carrelloService) {
-        this.carrelloService = carrelloService;
-    }
+    @Autowired
+    private UtenteRepository utenteRepository;
 
-    // Mostra il contenuto del carrello
     @GetMapping("/cart")
-    public String showCart(Model model) {
-        Carrello cart = carrelloService.getCarrelloById(1L);
+    public String showCart(
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model) {
+        Utente utente = utenteRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+
+        Carrello cart = utente.getCarrello();
         model.addAttribute("cart", cart);
+        model.addAttribute("utente", utente);
         return "cart";
     }
 
-    // UC7: Aggiunta di un libro al carrello (simulazione rotta)
-    @GetMapping("/cart/add/{bookId}")
-    public String addToCart(@PathVariable Long bookId) {
+    @PostMapping("/cart/add/{bookId}")
+    public String addToCart(
+            @PathVariable Long bookId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        Utente utente = utenteRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow();
+
+        carrelloService.aggiungiAlCarrello(utente.getCarrello(), bookId);
+        return "redirect:/cart";
+    }
+
+    @PostMapping("/cart/remove/{voceId}")
+    public String removeFromCart(
+            @PathVariable Long voceId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        Utente utente = utenteRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow();
+
+        carrelloService.rimuoviDalCarrello(utente.getCarrello(), voceId);
         return "redirect:/cart";
     }
 }

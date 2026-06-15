@@ -1,29 +1,36 @@
 package it.uniroma3.siw.controller;
 
+import it.uniroma3.siw.model.Utente;
+import it.uniroma3.siw.repository.UtenteRepository;
+import it.uniroma3.siw.service.OrdineService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import it.uniroma3.siw.service.OrdineService;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class OrdineController {
 
-    private final OrdineService ordineService;
+    @Autowired
+    private OrdineService ordineService;
 
-    public OrdineController(OrdineService ordineService) {
-        this.ordineService = ordineService;
-    }
+    @Autowired
+    private UtenteRepository utenteRepository;
 
-    // UC9: Visualizzazione degli ordini passati dell'utente
     @GetMapping("/orders")
-    public String showOrders(Model model) {
-        model.addAttribute("orders", ordineService.getAllOrdini());
+    public String showOrders(
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model) {
+
+        Utente utente = utenteRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow();
+
+        model.addAttribute("orders", ordineService.getOrdiniByUtente(utente));
         return "orders";
     }
 
-    // UC8: Effettuare un ordine (checkout dal carrello)
     @PostMapping("/orders/checkout")
     public String checkout() {
         return "redirect:/orders";

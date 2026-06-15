@@ -1,55 +1,46 @@
 package it.uniroma3.siw.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import it.uniroma3.siw.model.Libro;
 import it.uniroma3.siw.repository.LibroRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class LibroService {
 
+    @Autowired
     private LibroRepository libroRepository;
-    
-    public LibroService(LibroRepository libroRepository) {
-        this.libroRepository = libroRepository;
-    }
-    
+
     @Transactional(readOnly = true)
     public List<Libro> getAllLibri() {
         return libroRepository.findAll();
     }
-    
+
     @Transactional(readOnly = true)
     public Libro getLibroById(Long id) {
         return libroRepository.findById(id).orElse(null);
     }
 
+    @Transactional(readOnly = true)
     public List<Libro> searchLibri(String keyword) {
-        return libroRepository.findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(keyword, keyword);
+        return libroRepository
+                .findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(keyword, keyword);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Libro> searchLibriByTitoloOrAutore(String query) {
+        return searchLibri(query);
     }
     
     @Transactional
-    public Libro saveLibro(Libro book) {
-        return libroRepository.save(book);
-    }
-
-    @Transactional
-    public void deleteLibro(Long id) {
-        libroRepository.deleteById(id);
-    }
-
-	public List<Libro> searchLibriByTitoloOrAutore(String query) {
-		return libroRepository.findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(query, query);
-	}
-	
-	// UC4 e UC5: Salva un nuovo libro o ne aggiorna uno esistente
     public Libro salvaLibro(Libro libro) {
         return libroRepository.save(libro);
     }
 
-    // UC6: Cancella un libro dal database
+    @Transactional
     public void deleteLibroById(Long id) {
         libroRepository.deleteById(id);
     }

@@ -1,32 +1,29 @@
 package it.uniroma3.siw.service;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
 import it.uniroma3.siw.model.Utente;
 import it.uniroma3.siw.repository.UtenteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UtenteRepository utenteRepository;
-
-    public CustomUserDetailsService(UtenteRepository utenteRepository) {
-        this.utenteRepository = utenteRepository;
-    }
+    @Autowired
+    private UtenteRepository utenteRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Utente utente = utenteRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Email non trovata: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "Nessun utente con email: " + email));
 
         return User.builder()
-                .username(utente.getEmail()) 
+                .username(utente.getEmail())
                 .password(utente.getPassword())
-                .roles(utente.getRuolo()) 
+                .roles(utente.getRuolo())
                 .build();
     }
 }
