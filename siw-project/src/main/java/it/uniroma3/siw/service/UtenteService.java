@@ -25,16 +25,15 @@ public class UtenteService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Utente registraCliente(RegistrationForm form) {
-        // 1. Crea un carrello vuoto per il nuovo cliente
+    public Utente registraCliente(Utente utente2) {
         Carrello carrello = new Carrello();
         carrello = carrelloRepository.save(carrello);
 
         // 2. Crea l'utente con password cifrata e ruolo USER
         Utente utente = new Utente();
-        utente.setNome(form.getNome());
-        utente.setEmail(form.getEmail());
-        utente.setPassword(passwordEncoder.encode(form.getPassword()));
+        utente.setNome(utente2.getNome());
+        utente.setEmail(utente2.getEmail());
+        utente.setPassword(passwordEncoder.encode(utente2.getPassword()));
         utente.setRuolo("USER");
         utente.setCarrello(carrello);
 

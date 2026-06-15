@@ -13,7 +13,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Crea admin solo se non esiste già (sicuro con ddl-auto=update)
         if (!utenteService.emailEsiste("admin@bookshop.it")) {
             utenteService.registraAdmin("Admin", "admin@bookshop.it", "admin123");
             System.out.println("=================================================");

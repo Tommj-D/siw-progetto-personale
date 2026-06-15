@@ -23,8 +23,7 @@ public class LibroController {
     // UC1: Catalogo
     @GetMapping("/libri")
     public String showBooks(Model model) {
-        // Usiamo "listaLibri" come nome standard per il template catalogo
-        model.addAttribute("listaLibri", bookService.getAllLibri());
+        model.addAttribute("libri", bookService.getAllLibri());
         return "catalogo";
     }
 

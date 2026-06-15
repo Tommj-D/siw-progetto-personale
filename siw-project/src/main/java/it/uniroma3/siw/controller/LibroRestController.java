@@ -14,7 +14,7 @@ import it.uniroma3.siw.service.LibroService;
 
 @RestController
 @RequestMapping("/api/libri")
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class LibroRestController {
 
     private final LibroService libroService;

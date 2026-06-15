@@ -3,10 +3,12 @@ package it.uniroma3.siw.config;
 import it.uniroma3.siw.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -29,24 +34,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        // Dice a Spring Security "quando qualcuno fa login, carica l'utente con questo service"
-        provider.setUserDetailsService(customUserDetailsService);
-        // Dice a Spring Security "confronta la password con BCrypt"
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Collega il provider che legge gli utenti dal DB
-            .authenticationProvider(authenticationProvider())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/api/**")
             )
-
+            
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                 .requestMatchers("/libri", "/libri/**").permitAll()
@@ -80,15 +74,30 @@ public class SecurityConfig {
 
         return http.build();
     }
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+    	CorsConfiguration configuration = new CorsConfiguration();
+    	configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Origine di React
+    	configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    	configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+    	configuration.setAllowCredentials(true); // FONDAMENTALE PER I COOKIE
 
+    	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    	source.registerCorsConfiguration("/**", configuration); // Applica a tutte le rotte
+    	return source;
+    }
+    
     @Bean
     public AuthenticationSuccessHandler roleBasedSuccessHandler() {
         return (HttpServletRequest req, HttpServletResponse res, Authentication auth) -> {
             boolean isAdmin = auth.getAuthorities()
                     .contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            // Admin → pannello gestione libri
-            // Cliente → catalogo
-            res.sendRedirect(isAdmin ? "/admin/libri" : "/libri");
+            // Se è Admin va al pannello di gestione Thymeleaf (8080)
+            // Se è Cliente (USER) viene reindirizzato alla vetrina React (3000)
+            res.sendRedirect(isAdmin ? "/admin/libri" : "http://localhost:3000");
         };
     }
+    
+    
 }

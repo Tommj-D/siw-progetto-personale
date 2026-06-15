@@ -10,6 +10,8 @@ import it.uniroma3.siw.repository.LibroRepository;
 import it.uniroma3.siw.repository.UtenteRepository;
 import it.uniroma3.siw.service.OrdineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -54,10 +56,16 @@ public class OrdineRestController {
     }
 
     @GetMapping
-    public List<Ordine> getOrdini(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) return List.of();
+    public ResponseEntity<List<Ordine>> getOrdini(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        
+        // Trova l'utente
         Utente utente = utenteRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow();
-        return ordineService.getOrdiniByUtente(utente);
+        // Trova gli ordini
+        List<Ordine> mieiOrdini = ordineService.getOrdiniByUtente(utente);
+        return ResponseEntity.ok(mieiOrdini);
     }
 }

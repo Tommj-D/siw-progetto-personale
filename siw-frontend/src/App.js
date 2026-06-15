@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 
-// ==========================================
-// COMPONENTE: DETTAGLI LIBRO (UC2) - AGGIORNATO CON IMMAGINE
-// ==========================================
+// DETTAGLI LIBRO (UC2) 
 function DettagliLibro({ aggiungiAlCarrello }) {
   const { id } = useParams();
   const [libro, setLibro] = useState(null);
@@ -26,7 +24,7 @@ function DettagliLibro({ aggiungiAlCarrello }) {
             <img src={libro.copertina} alt={libro.titolo} className="img-fluid rounded shadow" />
           ) : (
             <div className="bg-secondary text-white d-flex align-items-center justify-content-center rounded shadow" style={{ height: '350px', opacity: 0.5 }}>
-              <span className="display-1">📖</span>
+              <span className="display-1"></span>
             </div>
           )}
         </div>
@@ -41,9 +39,9 @@ function DettagliLibro({ aggiungiAlCarrello }) {
           <p className="lead flex-grow-1">{libro.descrizione || "Nessuna descrizione disponibile per questo libro."}</p>
           
           <div className="d-flex gap-3 mt-4">
-            <Link to="/" className="btn btn-outline-secondary btn-lg">🔙 Catalogo</Link>
+            <Link to="/" className="btn btn-outline-secondary btn-lg">Catalogo</Link>
             <button className="btn btn-primary btn-lg flex-grow-1" onClick={() => aggiungiAlCarrello(libro)}>
-              🛒 Aggiungi al carrello
+              Aggiungi al carrello
             </button>
           </div>
         </div>
@@ -52,14 +50,14 @@ function DettagliLibro({ aggiungiAlCarrello }) {
   );
 }
 
-// ==========================================
-// COMPONENTE: STORICO ORDINI (UC9)
-// ==========================================
+// STORICO ORDINI (UC9)
 function StoricoOrdini() {
   const [ordini, setOrdini] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/orders')
+    fetch('http://localhost:8080/api/orders', {
+      credentials: 'include' 
+    })
       .then(res => res.json())
       .then(data => setOrdini(data))
       .catch(err => console.error("Errore ordini:", err));
@@ -67,7 +65,7 @@ function StoricoOrdini() {
 
   return (
     <div className="card shadow-sm border-0 p-4">
-      <h2 className="fw-bold mb-4">📦 I Miei Ordini</h2>
+      <h2 className="fw-bold mb-4">I Miei Ordini</h2>
       {ordini.length === 0 ? (
         <div className="alert alert-warning">Non hai ancora effettuato ordini.</div>
       ) : (
@@ -101,9 +99,7 @@ function StoricoOrdini() {
   );
 }
 
-// ==========================================
-// COMPONENTE PRINCIPALE: APP
-// ==========================================
+// PRINCIPALE: APP
 function App() {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -143,6 +139,7 @@ function App() {
     fetch('http://localhost:8080/api/orders/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(payload)
     })
     .then(res => res.json())
@@ -159,11 +156,11 @@ function App() {
         
         <div className="text-center mb-5">
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h1 className="display-4 fw-bold">La Vetrina di Booktique 📚</h1>
+            <h1 className="display-4 fw-bold">Vetrina</h1>
           </Link>
           <div className="mt-3 d-flex justify-content-center gap-3">
-            <Link to="/" className="btn btn-outline-dark">🏠 Catalogo</Link>
-            <Link to="/ordini" className="btn btn-outline-primary">📦 I Miei Ordini</Link>
+            <Link to="/" className="btn btn-outline-dark">Catalogo</Link>
+            <Link to="/ordini" className="btn btn-outline-primary">I Miei Ordini</Link>
           </div>
         </div>
 
@@ -173,18 +170,18 @@ function App() {
               
               <Route path="/" element={
                 <>
-                  <input type="text" className="form-control form-control-lg shadow-sm border-0 mb-4" placeholder="🔍 Cerca per titolo o autore..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                  <input type="text" className="form-control form-control-lg shadow-sm border-0 mb-4" placeholder="Cerca per titolo o autore..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                   <div className="row row-cols-1 row-cols-md-2 g-4">
                     {filteredBooks.map(book => (
                       <div className="col" key={book.id}>
                         <div className="card h-100 shadow-sm border-0">
                           
-                          {/* QUI ABBIAMO AGGIUNTO L'IMMAGINE! */}
+                          { }
                           {book.copertina ? (
                             <img src={book.copertina} className="card-img-top p-3" alt={book.titolo} style={{ height: '350px', objectFit: 'contain', backgroundColor: '#f8f9fa' }} />
                           ) : (
                             <div className="bg-secondary text-white d-flex align-items-center justify-content-center rounded-top" style={{ height: '350px', opacity: 0.7 }}>
-                              <span className="fs-1">📖</span>
+                              <span className="fs-1"></span>
                             </div>
                           )}
 
@@ -212,7 +209,7 @@ function App() {
 
           <div className="col-md-4">
             <div className="card shadow border-0 sticky-top" style={{ top: '20px' }}>
-              <div className="card-header bg-dark text-white fw-bold">🛒 Il tuo Carrello</div>
+              <div className="card-header bg-dark text-white fw-bold">Il tuo Carrello</div>
               <div className="card-body">
                 {carrello.length === 0 ? <p className="text-muted text-center m-0 py-3">Vuoto.</p> : (
                   <>
