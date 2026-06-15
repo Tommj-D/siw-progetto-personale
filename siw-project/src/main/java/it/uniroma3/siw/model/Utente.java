@@ -20,11 +20,8 @@ public class Utente {
     private String nome;
     private String email;
     private String password;
-    
-    // Conterrà "ADMIN" oppure "CLIENTE"
-    private String ruolo; 
+    private String ruolo; //"ADMIN" oppure "CLIENTE"
 
-    // Costruttore vuoto obbligatorio per JPA
     public Utente() {
     }
 
