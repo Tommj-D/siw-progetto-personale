@@ -19,7 +19,7 @@ public class AdminLibroController {
 
     @GetMapping
     public String showLibri(Model model) {
-        // Usiamo getAllLibri() come definito nel tuo LibroService
+        // Usiamo getAllLibri() come definito nel LibroService
         model.addAttribute("libri", libroService.getAllLibri());
         return "admin/libri"; 
     }

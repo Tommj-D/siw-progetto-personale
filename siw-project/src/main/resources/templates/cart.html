@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrello</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <div class="container py-5">
+    <h2>Il tuo Carrello</h2>
+
+    <div th:if="${cart == null or #lists.isEmpty(cart.voci)}" class="alert alert-warning">
+      Il carrello è vuoto.
+    </div>
+
+    <div th:unless="${cart == null or #lists.isEmpty(cart.voci)}">
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>Titolo</th>
+            <th>Autore</th>
+            <th>Prezzo</th>
+            <th>Quantità</th>
+            <th>Rimuovi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="voce : ${cart.voci}">
+            <td th:text="${voce.book.titolo}"></td>
+            <td th:text="${voce.book.autore}"></td>
+            <td th:text="${voce.book.prezzo} + ' €'"></td>
+            <td th:text="${voce.quantita}"></td>
+            <td>
+              <form th:action="@{/cart/remove/{id}(id=${voce.id})}" method="post">
+                <button type="submit" class="btn btn-sm btn-danger">Rimuovi</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a th:href="@{/libri}" class="btn btn-secondary mt-3">Torna al catalogo</a>
+  </div>
+
+</body>
+</html>

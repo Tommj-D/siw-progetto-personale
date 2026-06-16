@@ -1,7 +1,6 @@
 package it.uniroma3.siw.model;
 
 import java.util.Objects;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +17,8 @@ public class Utente {
     private Long id;
 
     private String nome;
+    
+    @jakarta.persistence.Column(unique = true, nullable = false)
     private String email;
     private String password;
     private String ruolo; //"ADMIN" oppure "CLIENTE"
@@ -25,7 +26,7 @@ public class Utente {
     public Utente() {
     }
 
-    // --- Getter e Setter ---
+    // Getter e Setter
     public Long getId() {
         return id;
     }

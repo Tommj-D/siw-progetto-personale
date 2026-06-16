@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>I miei Ordini</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <div class="container py-5">
+    <h2>I miei Ordini</h2>
+
+    <div th:if="${orders == null or #lists.isEmpty(orders)}" class="alert alert-warning">
+      Non hai ancora effettuato ordini.
+    </div>
+
+    <div th:each="ordine : ${orders}" class="card mb-4">
+      <div class="card-header">
+        <strong>Ordine #<span th:text="${ordine.id}"></span></strong>
+        &nbsp;–&nbsp; Data: <span th:text="${ordine.dataOrdine}"></span>
+        &nbsp;–&nbsp; Totale: <span th:text="${ordine.totale} + ' €'"></span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li th:each="dettaglio : ${ordine.dettagli}">
+            <span th:text="${dettaglio.libro.titolo}"></span>
+            – <span th:text="${dettaglio.quantita}"></span> pz.
+            x <span th:text="${dettaglio.prezzoAcquisto} + ' €'"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <a th:href="@{/libri}" class="btn btn-secondary">Torna al catalogo</a>
+  </div>
+
+</body>
+</html>

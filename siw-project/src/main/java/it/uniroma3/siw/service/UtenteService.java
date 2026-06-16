@@ -2,7 +2,6 @@ package it.uniroma3.siw.service;
 
 import it.uniroma3.siw.model.Carrello;
 import it.uniroma3.siw.model.Utente;
-import it.uniroma3.siw.model.RegistrationForm;
 import it.uniroma3.siw.repository.CarrelloRepository;
 import it.uniroma3.siw.repository.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class UtenteService {
         Carrello carrello = new Carrello();
         carrello = carrelloRepository.save(carrello);
 
-        // 2. Crea l'utente con password cifrata e ruolo USER
+        // Crea l'utente con password cifrata e ruolo USER
         Utente utente = new Utente();
         utente.setNome(utente2.getNome());
         utente.setEmail(utente2.getEmail());

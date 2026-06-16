@@ -1,12 +1,8 @@
 package it.uniroma3.siw.config;
 
-import it.uniroma3.siw.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,9 +20,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -54,7 +47,7 @@ public class SecurityConfig {
 
             // LOGIN
             .formLogin(form -> form
-                .loginPage("/login")              // La nostra pagina Thymeleaf
+                .loginPage("/login")              // La pagina Thymeleaf
                 .loginProcessingUrl("/login")      // Spring Security intercetta questo POST
                 .usernameParameter("email")        // Usiamo email come "username"
                 .passwordParameter("password")
@@ -78,13 +71,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
     	CorsConfiguration configuration = new CorsConfiguration();
-    	configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Origine di React
+    	configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
     	configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     	configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-    	configuration.setAllowCredentials(true); // FONDAMENTALE PER I COOKIE
+    	configuration.setAllowCredentials(true);
 
     	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    	source.registerCorsConfiguration("/**", configuration); // Applica a tutte le rotte
+    	source.registerCorsConfiguration("/**", configuration);
     	return source;
     }
     

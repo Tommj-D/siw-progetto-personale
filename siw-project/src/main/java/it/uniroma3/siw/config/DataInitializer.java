@@ -19,7 +19,6 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("  Admin creato:");
             System.out.println("    email:    admin@bookshop.it");
             System.out.println("    password: admin123");
-            System.out.println("  CAMBIA LA PASSWORD IN PRODUZIONE!");
             System.out.println("=================================================");
         }
     }

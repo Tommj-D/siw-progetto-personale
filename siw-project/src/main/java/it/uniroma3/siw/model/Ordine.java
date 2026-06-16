@@ -31,7 +31,6 @@ public class Ordine {
     @OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL, fetch = jakarta.persistence.FetchType.LAZY)
     private java.util.List<DettaglioOrdine> dettagli = new java.util.ArrayList<>();
 
-    // Metodo helper fondamentale per l'associazione bidirezionale
     public void aggiungiDettaglio(DettaglioOrdine dettaglio) {
         this.dettagli.add(dettaglio);
         dettaglio.setOrdine(this); 

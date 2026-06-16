@@ -1,7 +1,8 @@
 package it.uniroma3.siw.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,13 +43,13 @@ public class Carrello {
     }
 
     @OneToMany(mappedBy = "carrello", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<VoceCarrello> voci;
+    private List<VoceCarrello> voci = new ArrayList<>();
     
-    public java.util.List<VoceCarrello> getVoci() {
+    public List<VoceCarrello> getVoci() {
         return voci;
     }
 
-    public void setVoci(java.util.List<VoceCarrello> voci) {
+    public void setVoci(List<VoceCarrello> voci) {
         this.voci = voci;
     }
     

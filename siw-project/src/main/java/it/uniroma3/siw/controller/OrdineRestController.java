@@ -2,7 +2,6 @@ package it.uniroma3.siw.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import it.uniroma3.siw.model.DettaglioOrdine;
 import it.uniroma3.siw.model.Ordine;
 import it.uniroma3.siw.model.Utente;
@@ -46,6 +45,7 @@ public class OrdineRestController {
         for (DettaglioOrdine dettaglio : ordine.getDettagli()) {
             var libroVero = libroRepository.findById(dettaglio.getLibro().getId())
                     .orElseThrow(() -> new RuntimeException("Libro non trovato"));
+            dettaglio.setLibro(libroVero);           // collega l'entità gestita da JPA
             dettaglio.setPrezzoAcquisto(libroVero.getPrezzo());
             totale += libroVero.getPrezzo() * dettaglio.getQuantita();
             dettaglio.setOrdine(ordine);

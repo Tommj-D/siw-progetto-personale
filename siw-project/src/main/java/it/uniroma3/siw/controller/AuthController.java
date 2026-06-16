@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import it.uniroma3.siw.model.Utente;
 import it.uniroma3.siw.service.UtenteService;
 
@@ -16,28 +15,24 @@ public class AuthController {
     @Autowired
     private UtenteService utenteService;
 
-    // MOSTRA LA PAGINA DI LOGIN
     @GetMapping("/login")
     public String showLogin() {
-        return "login"; 
+        return "login";
     }
 
-    // MOSTRA LA PAGINA DI REGISTRAZIONE
     @GetMapping("/registrazione")
     public String showRegistrazione(Model model) {
         model.addAttribute("utente", new Utente());
-        return "register"; 
+        return "register";
     }
 
-    // ELABORA I DATI DELLA REGISTRAZIONE
     @PostMapping("/registrazione")
     public String processaRegistrazione(@ModelAttribute Utente utente, Model model) {
         if (utenteService.emailEsiste(utente.getEmail())) {
             model.addAttribute("errore", "Questa email è già registrata.");
-            return "register"; 
+            return "register";
         }
-        
         utenteService.registraCliente(utente);
-        return "redirect:/login"; 
+        return "redirect:/login";
     }
 }
