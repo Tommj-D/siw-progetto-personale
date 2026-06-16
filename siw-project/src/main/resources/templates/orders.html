@@ -23,7 +23,8 @@
       <div class="card-body">
         <ul>
           <li th:each="dettaglio : ${ordine.dettagli}">
-            <span th:text="${dettaglio.libro.titolo}"></span>
+            <!-- libro può essere null se è stato cancellato dall'admin -->
+            <span th:text="${dettaglio.libro != null ? dettaglio.libro.titolo : '(libro non più disponibile)'}"></span>
             – <span th:text="${dettaglio.quantita}"></span> pz.
             x <span th:text="${dettaglio.prezzoAcquisto} + ' €'"></span>
           </li>
