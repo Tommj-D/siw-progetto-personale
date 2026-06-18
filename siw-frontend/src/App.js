@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
 
 // DETTAGLI LIBRO (UC2) 
 function DettagliLibro({ aggiungiAlCarrello }) {
@@ -7,7 +7,7 @@ function DettagliLibro({ aggiungiAlCarrello }) {
   const [libro, setLibro] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/libri/${id}`)
+    fetch(`/api/libri/${id}`)
       .then(res => res.json())
       .then(data => setLibro(data))
       .catch(err => console.error("Errore:", err));
@@ -55,7 +55,7 @@ function StoricoOrdini() {
   const [ordini, setOrdini] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/orders', {
+    fetch('/api/orders', {
       credentials: 'include' 
     })
       .then(res => res.json())
@@ -100,16 +100,15 @@ function StoricoOrdini() {
 }
 
 // PRINCIPALE: APP
-function App() {
+function AppContent() {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [carrello, setCarrello] = useState([]);
-  
-  // STATO PER L'AUTENTICAZIONE (da collegare alla tua logica backend)
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/auth/status', {
+    fetch('/api/auth/status', {
       credentials: 'include' // Fondamentale per inviare il cookie a Spring Boot
     })
     .then(res => {
@@ -120,6 +119,13 @@ function App() {
       }
     })
     .catch(err => setIsAuthenticated(false)); // In caso di errore server
+  }, []);
+
+  useEffect(() => {
+  fetch('/api/libri')
+    .then(res => res.json())
+    .then(data => setBooks(data))
+    .catch(err => console.error("Errore caricamento libri:", err));
   }, []);
 
   const filteredBooks = books.filter(book => {
@@ -146,7 +152,7 @@ function App() {
       dettagli: carrello.map(item => ({ libro: { id: item.id }, quantita: item.quantita }))
     };
 
-    fetch('http://localhost:8080/api/orders/checkout', {
+    fetch('/api/orders/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -160,8 +166,19 @@ function App() {
     .catch(err => alert("Errore durante l'ordine. Assicurati di essere loggato."));
   };
 
+  const handleLogout = () => {
+  fetch('/logout', {
+    method: 'POST',
+    credentials: 'include'
+  })
+  .then(() => {
+    setIsAuthenticated(false);
+    navigate('/');
+  })
+  .catch(err => console.error("Errore durante il logout:", err));
+  };
+
   return (
-    <Router>
       <div className="container py-5 bg-light min-vh-100">
         
         {/* --- INTESTAZIONE E NAVBAR --- */}
@@ -176,16 +193,17 @@ function App() {
             
             <div className="d-flex align-items-center me-3">
             {!isAuthenticated && (
-                <a href="http://localhost:8080/login" className="btn btn-outline-light btn-sm me-2">
-                    Accedi
-                </a>
+              <a href="/login" className="btn btn-primary btn-sm me-2">
+                Accedi
+              </a>
             )}
 
             {isAuthenticated && (
-                <a href="http://localhost:8080/logout" className="btn btn-danger btn-sm">
-                    Esci
-                </a>
+              <button onClick={handleLogout} className="btn btn-danger btn-sm">
+                   Esci
+              </button>
             )}
+
         </div>
             
           </div>
@@ -263,6 +281,13 @@ function App() {
 
         </div>
       </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

@@ -35,15 +35,17 @@ public class SecurityConfig {
             )
             
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                .requestMatchers("/libri", "/libri/**").permitAll()
-                .requestMatchers("/login", "/registrazione").permitAll()
-                .requestMatchers("/api/libri/**").permitAll()
-                .requestMatchers("/api/orders/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/cart/**", "/orders/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
+            	    .requestMatchers("/", "/index.html", "/static/**", "/favicon.ico", "/manifest.json").permitAll()
+            	    .requestMatchers("/libro/**", "/ordini").permitAll()
+            	    .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+            	    .requestMatchers("/libri", "/libri/**").permitAll()
+            	    .requestMatchers("/login", "/registrazione").permitAll()
+            	    .requestMatchers("/api/libri/**").permitAll()
+            	    .requestMatchers("/api/orders/**").hasAnyRole("USER", "ADMIN")
+            	    .requestMatchers("/cart/**", "/orders/**").hasAnyRole("USER", "ADMIN")
+            	    .requestMatchers("/admin/**").hasRole("ADMIN")
+            	    .anyRequest().authenticated()
+            	)
 
             // LOGIN
             .formLogin(form -> form
@@ -56,12 +58,13 @@ public class SecurityConfig {
                 .permitAll()
             )
 
-            // LOGOUT
+         // DOPO
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("http://localhost:3000") // Rimanda a React
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler((request, response, authentication) ->
+                    response.setStatus(HttpServletResponse.SC_OK))
                 .permitAll()
             );
 
@@ -88,9 +91,8 @@ public class SecurityConfig {
                     .contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
             // Se è Admin va al pannello di gestione Thymeleaf (8080)
             // Se è Cliente (USER) viene reindirizzato alla vetrina React (3000)
-            res.sendRedirect(isAdmin ? "/admin/libri" : "http://localhost:3000");
+            res.sendRedirect(isAdmin ? "/admin/libri" : "/");
         };
     }
-    
     
 }
