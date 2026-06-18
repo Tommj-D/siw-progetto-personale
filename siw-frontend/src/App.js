@@ -104,12 +104,22 @@ function App() {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [carrello, setCarrello] = useState([]);
+  
+  // STATO PER L'AUTENTICAZIONE (da collegare alla tua logica backend)
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/libri')
-      .then(res => res.json())
-      .then(data => setBooks(data))
-      .catch(err => console.error("Errore:", err));
+    fetch('http://localhost:8080/api/auth/status', {
+      credentials: 'include' // Fondamentale per inviare il cookie a Spring Boot
+    })
+    .then(res => {
+      if (res.ok) {
+        setIsAuthenticated(true); // Se risponde OK, sei loggata!
+      } else {
+        setIsAuthenticated(false); // Altrimenti, sei una visitatrice
+      }
+    })
+    .catch(err => setIsAuthenticated(false)); // In caso di errore server
   }, []);
 
   const filteredBooks = books.filter(book => {
@@ -147,23 +157,41 @@ function App() {
       alert(`Ordine completato con successo! ID Ordine: ${data.id}`);
       setCarrello([]); 
     })
-    .catch(err => alert("Errore durante l'ordine. Controlla la console di Eclipse!"));
+    .catch(err => alert("Errore durante l'ordine. Assicurati di essere loggato."));
   };
 
   return (
     <Router>
       <div className="container py-5 bg-light min-vh-100">
         
+        {/* --- INTESTAZIONE E NAVBAR --- */}
         <div className="text-center mb-5">
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <h1 className="display-4 fw-bold">Vetrina</h1>
           </Link>
-          <div className="mt-3 d-flex justify-content-center gap-3">
+          
+          <div className="mt-3 d-flex justify-content-center align-items-center gap-3">
             <Link to="/" className="btn btn-outline-dark">Catalogo</Link>
             <Link to="/ordini" className="btn btn-outline-primary">I Miei Ordini</Link>
+            
+            <div className="d-flex align-items-center me-3">
+            {!isAuthenticated && (
+                <a href="http://localhost:8080/login" className="btn btn-outline-light btn-sm me-2">
+                    Accedi
+                </a>
+            )}
+
+            {isAuthenticated && (
+                <a href="http://localhost:8080/logout" className="btn btn-danger btn-sm">
+                    Esci
+                </a>
+            )}
+        </div>
+            
           </div>
         </div>
 
+        {/* --- CORPO DELLA PAGINA --- */}
         <div className="row">
           <div className="col-md-8">
             <Routes>
@@ -176,7 +204,6 @@ function App() {
                       <div className="col" key={book.id}>
                         <div className="card h-100 shadow-sm border-0">
                           
-                          { }
                           {book.copertina ? (
                             <img src={book.copertina} className="card-img-top p-3" alt={book.titolo} style={{ height: '350px', objectFit: 'contain', backgroundColor: '#f8f9fa' }} />
                           ) : (
@@ -207,6 +234,7 @@ function App() {
             </Routes>
           </div>
 
+          {/* --- CARRELLO LATERALE --- */}
           <div className="col-md-4">
             <div className="card shadow border-0 sticky-top" style={{ top: '20px' }}>
               <div className="card-header bg-dark text-white fw-bold">Il tuo Carrello</div>

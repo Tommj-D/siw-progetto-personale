@@ -12,6 +12,13 @@
     <nav class="navbar navbar-dark bg-dark mb-5 shadow-sm">
       <div class="container">
         <a class="navbar-brand fw-bold" th:href="@{/libri}">Booktique</a>
+        <div class="navbar-nav ms-auto d-flex align-items-center gap-2">
+            <a sec:authorize="isAnonymous()" class="btn btn-outline-light btn-sm" th:href="@{/login}">Accedi</a>
+            
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="m-0 p-0">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Esci</button>
+            </form>
+        </div>
       </div>
     </nav>
 

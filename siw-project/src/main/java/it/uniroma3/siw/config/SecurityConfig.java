@@ -59,7 +59,7 @@ public class SecurityConfig {
             // LOGOUT
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/libri")
+                .logoutSuccessUrl("http://localhost:3000") // Rimanda a React
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
