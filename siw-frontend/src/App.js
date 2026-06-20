@@ -207,13 +207,13 @@ useEffect(() => {
             
           <div className="d-flex align-items-center me-3">
             {isAdmin && (
-              <a href="/admin/libri" className="btn btn-warning btn-sm me-2">
+              <a href="http://localhost:8080/admin/libri" className="btn btn-warning btn-sm me-2">
                 <i className="bi bi-gear"></i> Area Admin
               </a>
             )}
 
             {!isAuthenticated && (
-              <a href="/login" className="btn btn-primary btn-sm me-2">
+              <a href="http://localhost:8080/login" className="btn btn-primary btn-sm me-2">
                 Accedi
               </a>
             )}
@@ -223,25 +223,8 @@ useEffect(() => {
                    Esci
               </button>
             )}
-
+        </div> 
         </div>
-
-            <div className="d-flex align-items-center me-3">
-            {!isAuthenticated && (
-              <a href="/login" className="btn btn-primary btn-sm me-2">
-                Accedi
-              </a>
-            )}
-
-            {isAuthenticated && (
-              <button onClick={handleLogout} className="btn btn-danger btn-sm">
-                   Esci
-              </button>
-            )}
-
-        </div>
-            
-          </div>
         </div>
 
         {/* --- CORPO DELLA PAGINA --- */}
