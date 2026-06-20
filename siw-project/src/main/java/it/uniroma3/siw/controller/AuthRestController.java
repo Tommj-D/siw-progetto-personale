@@ -15,11 +15,18 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthRestController {
 
-    @GetMapping("/status")
-    public ResponseEntity<?> checkStatus(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return ResponseEntity.ok(Map.of("email", userDetails.getUsername()));
-    }
+	@GetMapping("/status")
+	public ResponseEntity<?> checkStatus(@AuthenticationPrincipal UserDetails userDetails) {
+	    if (userDetails == null) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	    }
+	    String ruolo = userDetails.getAuthorities().stream()
+	            .findFirst()
+	            .map(a -> a.getAuthority().replace("ROLE_", ""))
+	            .orElse("USER");
+	    return ResponseEntity.ok(Map.of(
+	            "email", userDetails.getUsername(),
+	            "ruolo", ruolo
+	    ));
+	}
 }

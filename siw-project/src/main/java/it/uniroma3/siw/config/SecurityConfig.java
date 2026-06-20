@@ -58,15 +58,13 @@ public class SecurityConfig {
                 .permitAll()
             )
 
-         // DOPO
             .logout(logout -> logout
-                .logoutUrl("/logout")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler((request, response, authentication) ->
-                    response.setStatus(HttpServletResponse.SC_OK))
-                .permitAll()
-            );
+            	    .logoutUrl("/logout")
+            	    .invalidateHttpSession(true)
+            	    .deleteCookies("JSESSIONID")
+            	    .logoutSuccessUrl("/")
+            	    .permitAll()
+            	);
 
         return http.build();
     }

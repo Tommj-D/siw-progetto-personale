@@ -105,20 +105,33 @@ function AppContent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [carrello, setCarrello] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
-  const navigate = useNavigate();
+const [isAdmin, setIsAdmin] = useState(false);
+const navigate = useNavigate();
 
-  useEffect(() => {
+useEffect(() => {
     fetch('/api/auth/status', {
       credentials: 'include' // Fondamentale per inviare il cookie a Spring Boot
     })
     .then(res => {
       if (res.ok) {
         setIsAuthenticated(true); // Se risponde OK, sei loggata!
+        return res.json();
       } else {
         setIsAuthenticated(false); // Altrimenti, sei una visitatrice
+        return null;
       }
     })
-    .catch(err => setIsAuthenticated(false)); // In caso di errore server
+    .then(data => {
+      if (data) {
+        setIsAdmin(data.ruolo === 'ADMIN');
+      } else {
+        setIsAdmin(false);
+      }
+    })
+    .catch(err => {
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -173,6 +186,7 @@ function AppContent() {
   })
   .then(() => {
     setIsAuthenticated(false);
+    setIsAdmin(false);
     navigate('/');
   })
   .catch(err => console.error("Errore durante il logout:", err));
@@ -191,6 +205,27 @@ function AppContent() {
             <Link to="/" className="btn btn-outline-dark">Catalogo</Link>
             <Link to="/ordini" className="btn btn-outline-primary">I Miei Ordini</Link>
             
+          <div className="d-flex align-items-center me-3">
+            {isAdmin && (
+              <a href="/admin/libri" className="btn btn-warning btn-sm me-2">
+                <i className="bi bi-gear"></i> Area Admin
+              </a>
+            )}
+
+            {!isAuthenticated && (
+              <a href="/login" className="btn btn-primary btn-sm me-2">
+                Accedi
+              </a>
+            )}
+
+            {isAuthenticated && (
+              <button onClick={handleLogout} className="btn btn-danger btn-sm">
+                   Esci
+              </button>
+            )}
+
+        </div>
+
             <div className="d-flex align-items-center me-3">
             {!isAuthenticated && (
               <a href="/login" className="btn btn-primary btn-sm me-2">
