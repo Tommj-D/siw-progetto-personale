@@ -18,7 +18,7 @@ public class Libro {
     private String titolo;
     private String autore;
     private Double prezzo;
-    @Column(length = 2000)
+    @Column(length = 10000)
     private String descrizione;
 
     // Getter and Setter
