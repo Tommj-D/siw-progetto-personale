@@ -21,6 +21,13 @@
           <i class="bi bi-gear"></i> Area Gestione
         </a>
 
+        <a sec:authorize="isAuthenticated()" class="btn btn-outline-light btn-sm" th:href="@{/cart}">
+          <i class="bi bi-cart"></i> Carrello
+        </a>
+        <a sec:authorize="isAuthenticated()" class="btn btn-outline-light btn-sm" th:href="@{/orders}">
+          <i class="bi bi-receipt"></i> I Miei Ordini
+        </a>
+
         <a sec:authorize="isAnonymous()" class="btn btn-outline-light btn-sm" th:href="@{/login}">Accedi</a>
         <a sec:authorize="isAnonymous()" class="btn btn-primary btn-sm" th:href="@{/registrazione}">Registrati</a>
 
@@ -32,38 +39,148 @@
   </nav>
 
   <div class="container">
-    <h2 class="mb-4 fw-bold">Il nostro Catalogo</h2>
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-      
-      <div class="col" th:each="libro : ${libri}">
-        <div class="card h-100 shadow-sm border-0">
-          
-          <div th:if="${libro.copertina != null && !libro.copertina.isEmpty()}" class="text-center bg-dark" style="height: 250px; overflow: hidden;">
-             <img th:src="${libro.copertina}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Copertina">
-          </div>
-          <div th:unless="${libro.copertina != null && !libro.copertina.isEmpty()}" class="bg-secondary text-white text-center py-5 d-flex align-items-center justify-content-center" style="height: 250px;">
-            <span class="display-3"><i class="bi bi-book"></i></span>
-          </div>
-
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title fw-bold mb-1 text-truncate" th:text="${libro.titolo}"></h5>
-            <p class="card-text text-muted small mb-3">
-              di <span th:text="${libro.autore}"></span>
-            </p>
-            <div class="mt-auto d-flex justify-content-between align-items-center">
-              <span class="fs-5 fw-bold text-success" th:text="${libro.prezzo} + ' €'"></span>
-              <a th:href="@{/libri/{id}(id=${libro.id})}" class="btn btn-outline-primary btn-sm">Dettagli</a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-      <div th:if="${#lists.isEmpty(libri)}" class="col-12">
-         <div class="alert alert-info text-center">Il catalogo è attualmente vuoto.</div>
-      </div>
-
+    <!--
+        Il catalogo è reso da un componente React.
+        Il componente:
+          1. Recupera i libri via fetch() da /api/libri/homepage (max 10) o /api/libri (tutti)
+          2. Mantiene nello stato il termine di ricerca e la modalità (homepage / catalogo completo)
+          3. Aggiorna la lista istantaneamente durante la digitazione, senza ricaricare la pagina
+        Il bottone "Aggiungi al carrello" è un normale form HTML che POSTa a /cart/add/{id},
+        gestito da Spring (CarrelloController), non da React.
+    -->
+    <div id="catalogo-react">
+      <p class="text-muted">Caricamento libri...</p>
     </div>
   </div>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+  <script>
+    const { useState, useEffect } = React;
+
+    function CatalogoLibri() {
+      const [books, setBooks] = useState([]);
+      const [searchTerm, setSearchTerm] = useState("");
+      const [vediTutti, setVediTutti] = useState(false);
+      const [loading, setLoading] = useState(true);
+
+      useEffect(function() {
+        if (searchTerm.trim() === "") {
+          const endpoint = vediTutti ? '/api/libri' : '/api/libri/homepage';
+          fetch(endpoint)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+              setBooks(data);
+              setLoading(false);
+            })
+            .catch(function(err) { console.error("Errore caricamento libri:", err); });
+        } else {
+          const timeoutId = setTimeout(function() {
+            fetch('/api/libri/search?query=' + encodeURIComponent(searchTerm))
+              .then(function(res) { return res.json(); })
+              .then(function(data) {
+                setBooks(data);
+                setLoading(false);
+              })
+              .catch(function(err) { console.error("Errore ricerca:", err); });
+          }, 300);
+          return function() { clearTimeout(timeoutId); };
+        }
+      }, [searchTerm, vediTutti]);
+
+      const titolo = React.createElement('h2', { className: 'fw-bold m-0' },
+        vediTutti ? 'Catalogo Completo' : 'I Nostri Best Sellers');
+
+      const toggleBtn = React.createElement('button', {
+        className: 'btn btn-outline-dark btn-sm',
+        onClick: function() { setVediTutti(!vediTutti); }
+      }, vediTutti ? 'Vedi Best Sellers' : 'Vedi Catalogo Completo');
+
+      const header = React.createElement('div',
+        { className: 'd-flex justify-content-between align-items-center mb-4' },
+        titolo, toggleBtn);
+
+      const inputRicerca = React.createElement('input', {
+        type: 'text',
+        className: 'form-control form-control-lg shadow-sm border-0 mb-4',
+        placeholder: 'Cerca per titolo o autore...',
+        value: searchTerm,
+        onChange: function(e) { setSearchTerm(e.target.value); }
+      });
+
+      if (loading) {
+        return React.createElement('div', null, header, inputRicerca,
+          React.createElement('p', { className: 'text-muted' }, 'Caricamento...'));
+      }
+
+      if (books.length === 0) {
+        return React.createElement('div', null, header, inputRicerca,
+          React.createElement('div', { className: 'alert alert-info text-center' },
+            'Nessun libro trovato.'));
+      }
+
+      const cards = books.map(function(libro) {
+        const copertina = (libro.copertina && libro.copertina.trim() !== "")
+          ? React.createElement('div', {
+              className: 'text-center bg-dark',
+              style: { height: '250px', overflow: 'hidden' }
+            },
+              React.createElement('img', {
+                src: libro.copertina,
+                className: 'img-fluid w-100 h-100',
+                style: { objectFit: 'cover' },
+                alt: 'Copertina'
+              })
+            )
+          : React.createElement('div', {
+              className: 'bg-secondary text-white text-center py-5 d-flex align-items-center justify-content-center',
+              style: { height: '250px' }
+            },
+              React.createElement('span', { className: 'display-3' },
+                React.createElement('i', { className: 'bi bi-book' }))
+            );
+
+        const aggiungiForm = React.createElement('form', {
+          action: '/cart/add/' + libro.id,
+          method: 'post',
+          className: 'mt-2'
+        },
+          React.createElement('button', {
+            type: 'submit',
+            className: 'btn btn-primary btn-sm w-100'
+          }, '+ Carrello')
+        );
+
+        const corpo = React.createElement('div', { className: 'card-body d-flex flex-column' },
+          React.createElement('h5', { className: 'card-title fw-bold mb-1 text-truncate' }, libro.titolo),
+          React.createElement('p', { className: 'card-text text-muted small mb-3' }, 'di ' + libro.autore),
+          React.createElement('div', { className: 'mt-auto d-flex justify-content-between align-items-center' },
+            React.createElement('span', { className: 'fs-5 fw-bold text-success' }, libro.prezzo + ' €'),
+            React.createElement('a', {
+              href: '/libri/' + libro.id,
+              className: 'btn btn-outline-primary btn-sm'
+            }, 'Dettagli')
+          ),
+          aggiungiForm
+        );
+
+        const card = React.createElement('div', { className: 'card h-100 shadow-sm border-0' },
+          copertina, corpo);
+
+        return React.createElement('div', { className: 'col', key: libro.id }, card);
+      });
+
+      const grid = React.createElement('div',
+        { className: 'row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4' }, cards);
+
+      return React.createElement('div', null, header, inputRicerca, grid);
+    }
+
+    const container = document.getElementById('catalogo-react');
+    const root = ReactDOM.createRoot(container);
+    root.render(React.createElement(CatalogoLibri));
+  </script>
 
 </body>
 </html>

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import it.uniroma3.siw.service.LibroService;
 
 @Controller
@@ -15,11 +14,10 @@ public class LibroController {
     public LibroController(LibroService bookService) {
         this.bookService = bookService;
     }
-    
-    // UC1: Catalogo
+
+    // UC1: Catalogo — i libri vengono caricati via fetch dal componente React, non dal model
     @GetMapping("/libri")
     public String showBooks(Model model) {
-        model.addAttribute("libri", bookService.getAllLibri());
         return "catalogo";
     }
 
@@ -27,13 +25,6 @@ public class LibroController {
     @GetMapping("/libri/{id}")
     public String showBookDetails(@PathVariable Long id, Model model) {
         model.addAttribute("libro", bookService.getLibroById(id));
-        return "dettaglioLibro"; 
-    }
-
-    // UC3: Ricerca
-    @GetMapping("/libri/search")
-    public String searchBooks(@RequestParam("keyword") String keyword, Model model) {
-        model.addAttribute("libri", bookService.searchLibri(keyword));
-        return "catalogo";
+        return "dettaglioLibro";
     }
 }
