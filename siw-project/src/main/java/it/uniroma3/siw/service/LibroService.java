@@ -27,6 +27,11 @@ public class LibroService {
     public List<Libro> getAllLibri() {
         return libroRepository.findAll();
     }
+    
+    @Transactional(readOnly = true)
+    public List<Libro> getTopTenLibri() {
+        return libroRepository.findTop10ByOrderByIdAsc();
+    }
 
     @Transactional(readOnly = true)
     public Libro getLibroById(Long id) {

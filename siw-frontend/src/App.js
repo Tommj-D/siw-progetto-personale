@@ -135,16 +135,22 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-  fetch('/api/libri')
-    .then(res => res.json())
-    .then(data => setBooks(data))
-    .catch(err => console.error("Errore caricamento libri:", err));
-  }, []);
+    if (searchTerm.trim() === "") {
+      fetch('/api/libri/homepage')
+        .then(res => res.json())
+        .then(data => setBooks(data))
+        .catch(err => console.error("Errore caricamento homepage:", err));
+    } else {
+      const timeoutId = setTimeout(() => {
+        fetch(`/api/libri/search?query=${encodeURIComponent(searchTerm)}`)
+          .then(res => res.json())
+          .then(data => setBooks(data))
+          .catch(err => console.error("Errore ricerca:", err));
+      }, 300);
 
-  const filteredBooks = books.filter(book => {
-    const termine = searchTerm.toLowerCase();
-    return book.titolo.toLowerCase().includes(termine) || book.autore.toLowerCase().includes(termine);
-  });
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchTerm]);
 
   const aggiungiAlCarrello = (libro) => {
     const libroEsistente = carrello.find(item => item.id === libro.id);
@@ -198,7 +204,7 @@ useEffect(() => {
         {/* --- INTESTAZIONE E NAVBAR --- */}
         <div className="text-center mb-5">
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h1 className="display-4 fw-bold">Vetrina</h1>
+            <h1 className="display-4 fw-bold">Best Sellers</h1>
           </Link>
           
           <div className="mt-3 d-flex justify-content-center align-items-center gap-3">
@@ -236,7 +242,7 @@ useEffect(() => {
                 <>
                   <input type="text" className="form-control form-control-lg shadow-sm border-0 mb-4" placeholder="Cerca per titolo o autore..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                   <div className="row row-cols-1 row-cols-md-2 g-4">
-                    {filteredBooks.map(book => (
+                    {books.map(book => (
                       <div className="col" key={book.id}>
                         <div className="card h-100 shadow-sm border-0">
                           

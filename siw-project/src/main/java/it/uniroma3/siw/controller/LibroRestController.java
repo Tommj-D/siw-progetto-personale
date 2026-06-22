@@ -23,21 +23,27 @@ public class LibroRestController {
         this.libroService = bookService;
     }
 
-    // Risponde a: GET http://localhost:8080/api/books
+    // Risponde a: GET http://localhost:8080/api/libri
     @GetMapping
     public List<Libro> getAllLibri() {
         return libroService.getAllLibri();
     }
 
-    // Risponde a: GET http://localhost:8080/api/books/1
-    @GetMapping("/{id}")
-    public Libro getLibroById(@PathVariable Long id) {
-        return libroService.getLibroById(id);
+    // Risponde a: GET http://localhost:8080/api/libri/homepage
+    @GetMapping("/homepage")
+    public List<Libro> getLibriHomepage() {
+        return libroService.getTopTenLibri();
     }
-    
+
     // Risponde a: GET http://localhost:8080/api/libri/search?query=parola
     @GetMapping("/search")
     public List<Libro> searchLibri(@RequestParam String query) {
         return libroService.searchLibriByTitoloOrAutore(query);
+    }
+
+    // Risponde a: GET http://localhost:8080/api/libri/1
+    @GetMapping("/{id}")
+    public Libro getLibroById(@PathVariable Long id) {
+        return libroService.getLibroById(id);
     }
 }
