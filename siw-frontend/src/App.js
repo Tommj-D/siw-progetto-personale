@@ -201,34 +201,34 @@ useEffect(() => {
   return (
       <div className="container py-5 bg-light min-vh-100">
         
-        {/* --- INTESTAZIONE E NAVBAR --- */}
-        <div className="text-center mb-5">
-          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h1 className="display-4 fw-bold">Best Sellers</h1>
-          </Link>
-          
-          <div className="mt-3 d-flex justify-content-center align-items-center gap-3">
-            <Link to="/" className="btn btn-outline-dark">Catalogo</Link>
-            <Link to="/ordini" className="btn btn-outline-primary">I Miei Ordini</Link>
-            
-          <div className="d-flex align-items-center me-3">
-            {isAdmin && (
-              <a href="http://localhost:8080/admin/libri" className="btn btn-warning btn-sm me-2">
-                <i className="bi bi-gear"></i> Area Admin
-              </a>
-            )}
+	  {/* --- INTESTAZIONE E NAVBAR --- */}
+	  <div className="text-center mb-5">
+	    <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+	      <h1 className="display-4 fw-bold">Best Sellers</h1>
+	    </Link>
 
-            {!isAuthenticated && (
-              <a href="http://localhost:8080/login" className="btn btn-primary btn-sm me-2">
-                Accedi
-              </a>
-            )}
+	    <div className="mt-3 d-flex justify-content-center align-items-center gap-3">
+	      <Link to="/" className="btn btn-outline-dark btn-sm">Catalogo</Link>
+	      <Link to="/ordini" className="btn btn-outline-primary btn-sm">I Miei Ordini</Link>
 
-            {isAuthenticated && (
-              <button onClick={handleLogout} className="btn btn-danger btn-sm">
-                   Esci
-              </button>
-            )}
+	    <div className="d-flex align-items-center me-3">
+	      {isAdmin && (
+	        <a href="http://localhost:8080/admin/libri" className="btn btn-warning btn-sm me-2">
+	          <i className="bi bi-gear"></i> Area Admin
+	        </a>
+	      )}
+
+	      {!isAuthenticated && (
+	        <a href="http://localhost:8080/login" className="btn btn-primary btn-sm me-2">
+	          Accedi
+	        </a>
+	      )}
+
+	      {isAuthenticated && (
+	        <button onClick={handleLogout} className="btn btn-danger btn-sm">
+	             Esci
+	        </button>
+	      )}
         </div> 
         </div>
         </div>
