@@ -212,17 +212,18 @@ useEffect(() => {
 	      <Link to="/ordini" className="btn btn-outline-primary btn-sm">I Miei Ordini</Link>
 
 	    <div className="d-flex align-items-center me-3">
-	      {isAdmin && (
-	        <a href="http://localhost:8080/admin/libri" className="btn btn-warning btn-sm me-2">
-	          <i className="bi bi-gear"></i> Area Admin
-	        </a>
-	      )}
+		
+			{isAdmin && (
+		  		<a href="/admin/libri" className="btn btn-warning btn-sm me-2">
+		    	<i className="bi bi-gear"></i> Area Admin
+		  		</a>
+			)}
 
-	      {!isAuthenticated && (
-	        <a href="http://localhost:8080/login" className="btn btn-primary btn-sm me-2">
-	          Accedi
-	        </a>
-	      )}
+			{!isAuthenticated && (
+		  		<a href="/login" className="btn btn-primary btn-sm me-2">
+		    	Accedi
+		  		</a>
+			)}
 
 	      {isAuthenticated && (
 	        <button onClick={handleLogout} className="btn btn-danger btn-sm">
