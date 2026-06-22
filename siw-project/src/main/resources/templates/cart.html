@@ -39,6 +39,10 @@
           </tr>
         </tbody>
       </table>
+
+      <form th:action="@{/orders/checkout}" method="post" class="mt-4">
+        <button type="submit" class="btn btn-success btn-lg">Conferma Ordine</button>
+      </form>
     </div>
 
     <a th:href="@{/libri}" class="btn btn-secondary mt-3">Torna al catalogo</a>

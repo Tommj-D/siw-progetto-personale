@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Catalogo Libri</title>
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
@@ -46,7 +48,8 @@
           2. Mantiene nello stato il termine di ricerca e la modalità (homepage / catalogo completo)
           3. Aggiorna la lista istantaneamente durante la digitazione, senza ricaricare la pagina
         Il bottone "Aggiungi al carrello" è un normale form HTML che POSTa a /cart/add/{id},
-        gestito da Spring (CarrelloController), non da React.
+        gestito da Spring (CarrelloController). Il token CSRF viene letto dal meta-tag
+        generato da Thymeleaf e incluso come campo hidden nel form.
     -->
     <div id="catalogo-react">
       <p class="text-muted">Caricamento libri...</p>
@@ -64,6 +67,9 @@
       const [searchTerm, setSearchTerm] = useState("");
       const [vediTutti, setVediTutti] = useState(false);
       const [loading, setLoading] = useState(true);
+
+      const csrfMeta = document.querySelector('meta[name="_csrf"]');
+      const csrfToken = csrfMeta ? csrfMeta.content : "";
 
       useEffect(function() {
         if (searchTerm.trim() === "") {
@@ -121,31 +127,36 @@
       }
 
       const cards = books.map(function(libro) {
-        const copertina = (libro.copertina && libro.copertina.trim() !== "")
-          ? React.createElement('div', {
-              className: 'text-center bg-dark',
-              style: { height: '250px', overflow: 'hidden' }
-            },
-              React.createElement('img', {
-                src: libro.copertina,
-                className: 'img-fluid w-100 h-100',
-                style: { objectFit: 'cover' },
-                alt: 'Copertina'
-              })
-            )
-          : React.createElement('div', {
-              className: 'bg-secondary text-white text-center py-5 d-flex align-items-center justify-content-center',
-              style: { height: '250px' }
-            },
-              React.createElement('span', { className: 'display-3' },
-                React.createElement('i', { className: 'bi bi-book' }))
-            );
+		const copertina = (libro.copertina && libro.copertina.trim() !== "")
+		  ? React.createElement('div', {
+		      className: 'text-center bg-dark',
+		      style: { height: '380px', overflow: 'hidden' }
+		    },
+		      React.createElement('img', {
+		        src: libro.copertina,
+		        className: 'img-fluid w-100 h-100',
+		        style: { objectFit: 'contain' },
+		        alt: 'Copertina'
+		      })
+		    )
+		  : React.createElement('div', {
+		      className: 'bg-secondary text-white text-center py-5 d-flex align-items-center justify-content-center',
+		      style: { height: '380px' }
+		    },
+		      React.createElement('span', { className: 'display-3' },
+		        React.createElement('i', { className: 'bi bi-book' }))
+		    );
 
         const aggiungiForm = React.createElement('form', {
           action: '/cart/add/' + libro.id,
           method: 'post',
           className: 'mt-2'
         },
+          React.createElement('input', {
+            type: 'hidden',
+            name: '_csrf',
+            value: csrfToken
+          }),
           React.createElement('button', {
             type: 'submit',
             className: 'btn btn-primary btn-sm w-100'

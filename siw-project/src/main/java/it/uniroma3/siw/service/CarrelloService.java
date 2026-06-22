@@ -59,4 +59,10 @@ public class CarrelloService {
     public void rimuoviDalCarrello(Carrello carrello, Long voceId) {
         voceCarrelloRepository.deleteById(voceId);
     }
+    
+    @Transactional
+    public void svuotaCarrello(Carrello carrello) {
+        voceCarrelloRepository.deleteAll(carrello.getVoci());
+        carrello.getVoci().clear();
+    }
 }

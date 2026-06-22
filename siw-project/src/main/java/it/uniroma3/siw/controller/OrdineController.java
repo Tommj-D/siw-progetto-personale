@@ -32,7 +32,11 @@ public class OrdineController {
     }
 
     @PostMapping("/orders/checkout")
-    public String checkout() {
+    public String checkout(@AuthenticationPrincipal UserDetails userDetails) {
+        Utente utente = utenteRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow();
+
+        ordineService.creaOrdineDaCarrello(utente, utente.getCarrello());
         return "redirect:/orders";
     }
 }
