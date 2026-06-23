@@ -6,11 +6,6 @@ function CatalogoLibri() {
   const [vediTutti, setVediTutti] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const csrfMeta = document.querySelector('meta[name="_csrf"]');
-  const csrfToken = csrfMeta ? csrfMeta.content : "";
-  
-  const isAdmin = document.querySelector('a[href="/admin/libri"]') !== null;
-
   useEffect(function() {
     if (searchTerm.trim() === "") {
       const endpoint = vediTutti ? '/api/libri' : '/api/libri/homepage';
@@ -92,11 +87,6 @@ function CatalogoLibri() {
       method: 'post',
       className: 'mt-2'
     },
-      React.createElement('input', {
-        type: 'hidden',
-        name: '_csrf',
-        value: csrfToken
-      }),
       React.createElement('button', {
         type: 'submit',
         className: 'btn btn-primary btn-sm w-100'
@@ -113,9 +103,7 @@ function CatalogoLibri() {
           className: 'btn btn-outline-primary btn-sm'
         }, 'Dettagli')
       ),
-	  
-	  //L'admin non vede i pulsanti carrello dato che non ce l'ha
-	  !isAdmin ? aggiungiForm : null
+      aggiungiForm
     );
 
     const card = React.createElement('div', { className: 'card h-100 shadow-sm border-0' },
