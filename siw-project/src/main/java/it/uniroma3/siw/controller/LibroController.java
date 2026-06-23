@@ -9,10 +9,10 @@ import it.uniroma3.siw.service.LibroService;
 @Controller
 public class LibroController {
 
-    private final LibroService bookService;
+    private final LibroService libroService;
 
-    public LibroController(LibroService bookService) {
-        this.bookService = bookService;
+    public LibroController(LibroService libroService) {
+        this.libroService = libroService;
     }
 
     // UC1: Catalogo — i libri vengono caricati via fetch dal componente React, non dal model
@@ -24,7 +24,7 @@ public class LibroController {
     // UC2: Dettaglio libro
     @GetMapping("/libri/{id}")
     public String showBookDetails(@PathVariable Long id, Model model) {
-        model.addAttribute("libro", bookService.getLibroById(id));
+        model.addAttribute("libro", libroService.getLibroById(id));
         return "dettaglioLibro";
     }
 }
