@@ -9,7 +9,7 @@ function CatalogoLibri() {
   const csrfMeta = document.querySelector('meta[name="_csrf"]');
   const csrfToken = csrfMeta ? csrfMeta.content : "";
   
-  const mostraCarrello = document.querySelector('a[href="/cart"]') !== null;
+  const isAdmin = document.querySelector('a[href="/admin/libri"]') !== null;
 
   useEffect(function() {
     if (searchTerm.trim() === "") {
@@ -113,7 +113,9 @@ function CatalogoLibri() {
           className: 'btn btn-outline-primary btn-sm'
         }, 'Dettagli')
       ),
-      mostraCarrello ? aggiungiForm : null
+	  
+	  //L'admin non vede i pulsanti carrello dato che non ce l'ha
+	  !isAdmin ? aggiungiForm : null
     );
 
     const card = React.createElement('div', { className: 'card h-100 shadow-sm border-0' },
