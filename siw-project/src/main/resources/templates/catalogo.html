@@ -4,8 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Catalogo Libri</title>
-  <meta name="_csrf" th:content="${_csrf.token}">
-  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
@@ -23,7 +21,7 @@
           <i class="bi bi-gear"></i> Area Gestione
         </a>
 
-        <a sec:authorize="isAuthenticated()and not hasRole('ADMIN')" class="btn btn-outline-light btn-sm" th:href="@{/cart}">
+        <a sec:authorize="isAuthenticated()" class="btn btn-outline-light btn-sm" th:href="@{/cart}">
           <i class="bi bi-cart"></i> Carrello
         </a>
         <a sec:authorize="isAuthenticated()" class="btn btn-outline-light btn-sm" th:href="@{/orders}">
@@ -41,11 +39,11 @@
   </nav>
 
   <div class="container">
-	
     <!--
         Il catalogo è reso da un componente React (vedi /js/catalogo.js).
-        Il componente recupera i libri via fetch() dalle API REST,
-        gestisce ricerca live e toggle homepage/catalogo completo.
+        Il componente recupera i libri via fetch() dalle API REST, gestisce ricerca live.
+        Il bottone "Aggiungi al carrello" è un form HTML che POSTa a /cart/add/{id},
+        gestito da Spring (CarrelloController).
     -->
     <div id="catalogo-react">
       <p class="text-muted">Caricamento libri...</p>
