@@ -8,6 +8,8 @@ function CatalogoLibri() {
 
   const csrfMeta = document.querySelector('meta[name="_csrf"]');
   const csrfToken = csrfMeta ? csrfMeta.content : "";
+  
+  const mostraCarrello = document.querySelector('a[href="/cart"]') !== null;
 
   useEffect(function() {
     if (searchTerm.trim() === "") {
@@ -111,7 +113,7 @@ function CatalogoLibri() {
           className: 'btn btn-outline-primary btn-sm'
         }, 'Dettagli')
       ),
-      aggiungiForm
+      mostraCarrello ? aggiungiForm : null
     );
 
     const card = React.createElement('div', { className: 'card h-100 shadow-sm border-0' },
