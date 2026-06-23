@@ -15,7 +15,7 @@ public class LibroController {
         this.libroService = libroService;
     }
 
-    // UC1: Catalogo — i libri vengono caricati via fetch dal componente React, non dal model
+    // UC1: Catalogo (i libri vengono caricati via fetch dal componente React, non dal model)
     @GetMapping("/libri")
     public String showBooks(Model model) {
         return "catalogo";

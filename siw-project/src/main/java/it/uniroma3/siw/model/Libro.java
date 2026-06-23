@@ -14,7 +14,6 @@ public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String titolo;
     private String autore;
     private Double prezzo;
