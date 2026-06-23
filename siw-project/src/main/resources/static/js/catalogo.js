@@ -6,6 +6,8 @@ function CatalogoLibri() {
   const [vediTutti, setVediTutti] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const isAdmin = document.querySelector('a[href="/admin/libri"]') !== null;
+
   useEffect(function() {
     if (searchTerm.trim() === "") {
       const endpoint = vediTutti ? '/api/libri' : '/api/libri/homepage';
@@ -103,7 +105,7 @@ function CatalogoLibri() {
           className: 'btn btn-outline-primary btn-sm'
         }, 'Dettagli')
       ),
-      aggiungiForm
+      isAdmin ? null : aggiungiForm
     );
 
     const card = React.createElement('div', { className: 'card h-100 shadow-sm border-0' },

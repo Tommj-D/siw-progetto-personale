@@ -21,7 +21,7 @@
           <i class="bi bi-gear"></i> Area Gestione
         </a>
 
-        <a sec:authorize="isAuthenticated()" class="btn btn-outline-light btn-sm" th:href="@{/cart}">
+        <a sec:authorize="isAuthenticated()and !hasRole('ADMIN')"class="btn btn-outline-light btn-sm" th:href="@{/cart}">
           <i class="bi bi-cart"></i> Carrello
         </a>
         <a sec:authorize="isAuthenticated()" class="btn btn-outline-light btn-sm" th:href="@{/orders}">
